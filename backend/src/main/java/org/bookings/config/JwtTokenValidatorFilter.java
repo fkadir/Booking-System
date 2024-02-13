@@ -24,62 +24,30 @@ public class JwtTokenValidatorFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-
-
         String jwt= request.getHeader(Constants.JWT_HEADER);
 
-
         if(jwt != null) {
-
             try {
-
+                System.out.println(jwt);
                 //extracting the word Bearer
                 jwt = jwt.substring(7);
-
-                System.out.println(1);
-
                 SecretKey key= Keys.hmacShaKeyFor(Constants.JWT_KEY.getBytes());
-
-
-
                 Claims claims= Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
-
-
                 String username= String.valueOf(claims.get("username"));
-
                 System.out.println(username);
-
-
-                String authorities= String.valueOf(claims.get("authorities"));
-
-
-
-                Authentication auth = new UsernamePasswordAuthenticationToken(username, null, AuthorityUtils.commaSeparatedStringToAuthorityList(authorities));
-
-
-//				List<GrantedAuthority> authorities=(List<GrantedAuthority>)claims.get("authorities");
-//				Authentication auth = new UsernamePasswordAuthenticationToken(username, null, authorities);
-
-
+//                String authorities= String.valueOf(claims.get("authorities"));
+                Authentication auth = new UsernamePasswordAuthenticationToken(username, null); //, AuthorityUtils.commaSeparatedStringToAuthorityList(authorities)
+                System.out.println(auth);
                 SecurityContextHolder.getContext().setAuthentication(auth);
-
             } catch (Exception e) {
+                System.out.println(e.getMessage());
                 throw new BadCredentialsException("Invalid Token received..");
             }
-
-
-
         }
-
         filterChain.doFilter(request, response);
-
-
     }
 
-
-
     //this time this validation filter has to be executed for all the apis except the /login api
-
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();

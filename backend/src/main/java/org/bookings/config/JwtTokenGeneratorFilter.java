@@ -26,43 +26,25 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-
-        System.out.println("inside doFilter....");
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (null != authentication) {
 
-            System.out.println("auth.getAuthorities "+authentication.getAuthorities());
-
-
+//            System.out.println("auth.getAuthorities "+authentication.getAuthorities());
             SecretKey key = Keys.hmacShaKeyFor(Constants.JWT_KEY.getBytes());
 
-
-
             String jwt = Jwts.builder()
-                    .setIssuer("Ratan")
+                    .setIssuer("BookingSystem")
                     .setSubject("JWT Token")
                     .claim("username", authentication.getName())
-                    .claim("authorities", populateAuthorities(authentication.getAuthorities()))
+//                    .claim("authorities", populateAuthorities(authentication.getAuthorities()))
                     .setIssuedAt(new Date())
                     .setExpiration(new Date(new Date().getTime()+ 30000000)) // expiration time of 8 hours
                     .signWith(key).compact();
 
-
-
             response.setHeader(Constants.JWT_HEADER, jwt);
-
-
         }
-
         filterChain.doFilter(request, response);
-
-
-
     }
-
-
-
 
     private String populateAuthorities(Collection<? extends GrantedAuthority> collection) {
 
@@ -75,9 +57,6 @@ public class JwtTokenGeneratorFilter extends OncePerRequestFilter {
 
 
     }
-
-
-
 
     //this make sure that this filter will execute only for first time when client call the api /login at first time
     @Override
