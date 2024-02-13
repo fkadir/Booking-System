@@ -1,6 +1,8 @@
-package org.bookings;
+package org.bookings.controller;
 
 import lombok.AllArgsConstructor;
+import org.bookings.model.Admin;
+import org.bookings.service.AdminService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/bookings/admins")
+@RequestMapping("/bookings/admin")
 @AllArgsConstructor
 public class AdminController {
 

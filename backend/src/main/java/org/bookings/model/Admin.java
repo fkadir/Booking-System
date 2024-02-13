@@ -1,4 +1,4 @@
-package org.bookings;
+package org.bookings.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -18,6 +18,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bookings.Role;
 
 @Data
 @NoArgsConstructor
@@ -34,9 +35,6 @@ public class Admin {
     @NotNull @NotEmpty @NotBlank
     @Column(unique = true) @Email
     private String email;
-
-    @NotNull @NotEmpty @NotBlank
-    private String mobile;
 
     @NotNull @NotEmpty @NotBlank
     @JsonProperty(access = Access.WRITE_ONLY)

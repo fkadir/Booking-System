@@ -1,16 +1,14 @@
-package org.bookings;
+package org.bookings.service.impl;
 
 import java.util.Optional;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.bookings.AdminDao;
+import org.bookings.AdminException;
+import org.bookings.Role;
+import org.bookings.model.Admin;
+import org.bookings.service.AdminService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import org.bookings.Role;
-import org.bookings.AdminException;
-import org.bookings.Admin;
-import org.bookings.AdminDao;
-import org.bookings.AdminService;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 public class AdminServiceImpl implements AdminService {
 
     private AdminDao dao;
-    private PasswordEncoder passwordEncoder;
 
     @Override
     public Admin registerAdmin(Admin admin) throws AdminException {
@@ -32,8 +29,9 @@ public class AdminServiceImpl implements AdminService {
             throw new AdminException("Admin already registered with this email!");
         }
 
-        String hashedPassword = passwordEncoder.encode(admin.getPassword());
-        admin.setPassword(hashedPassword);
+//        String hashedPassword = passwordEncoder.encode(admin.getPassword());
+//        admin.setPassword(hashedPassword);
+        admin.setPassword(admin.getPassword());
         admin.setRole(Role.ROLE_ADMIN);
 
         return dao.save(admin);
