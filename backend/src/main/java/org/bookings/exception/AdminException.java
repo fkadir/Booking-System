@@ -1,4 +1,4 @@
-package org.bookings;
+package org.bookings.exception;
 
 @SuppressWarnings("serial")
 public class AdminException extends RuntimeException {

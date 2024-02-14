@@ -1,4 +1,4 @@
-package org.bookings;
+package org.bookings.repository;
 
 import java.util.Optional;
 

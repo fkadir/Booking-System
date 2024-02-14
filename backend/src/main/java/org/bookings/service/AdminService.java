@@ -1,6 +1,6 @@
 package org.bookings.service;
 
-import org.bookings.AdminException;
+import org.bookings.exception.AdminException;
 import org.bookings.model.Admin;
 
 public interface AdminService {

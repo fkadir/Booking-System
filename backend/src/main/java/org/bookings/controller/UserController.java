@@ -2,6 +2,8 @@ package org.bookings.controller;
 
 import java.util.List;
 
+import org.bookings.dto.request.UserRequest;
+import org.bookings.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,36 +31,36 @@ public class UserController {
         return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update/name")
-    public ResponseEntity<String> updateName(@RequestBody UpdateRequest updateRequest) {
-        String res = userService.updateName(updateRequest);
-        return new ResponseEntity<>(res, HttpStatus.OK);
-
-    }
-
-    @PutMapping("/update/password")
-    public ResponseEntity<String> updatePassword(@RequestBody UpdatePasswordRequest updatePasswordRequest) {
-        String res = userService.updatePassword(updatePasswordRequest);
-        return new ResponseEntity<>(res, HttpStatus.OK);
-
-    }
-
-    @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteUser(@RequestBody UpdateRequest updateRequest) {
-        String res = userService.deleteUser(updateRequest);
-        return new ResponseEntity<>(res, HttpStatus.OK);
-    }
-
-    @GetMapping("/view-profile")
-    public ResponseEntity<UserResponse> getUserById() {
-        UserResponse res = userService.viewProfile();
-        return new ResponseEntity<>(res, HttpStatus.OK);
-    }
-
-    @GetMapping("/get/to-be-deleted")
-    public ResponseEntity<List<UserResponse>> getAllUser() {
-        List<UserResponse> res = userService.getToBeDeletedUser();
-        return new ResponseEntity<>(res, HttpStatus.OK);
-    }
+//    @PutMapping("/update/name")
+//    public ResponseEntity<String> updateName(@RequestBody UpdateRequest updateRequest) {
+//        String res = userService.updateName(updateRequest);
+//        return new ResponseEntity<>(res, HttpStatus.OK);
+//
+//    }
+//
+//    @PutMapping("/update/password")
+//    public ResponseEntity<String> updatePassword(@RequestBody UpdatePasswordRequest updatePasswordRequest) {
+//        String res = userService.updatePassword(updatePasswordRequest);
+//        return new ResponseEntity<>(res, HttpStatus.OK);
+//
+//    }
+//
+//    @DeleteMapping("/delete")
+//    public ResponseEntity<String> deleteUser(@RequestBody UpdateRequest updateRequest) {
+//        String res = userService.deleteUser(updateRequest);
+//        return new ResponseEntity<>(res, HttpStatus.OK);
+//    }
+//
+//    @GetMapping("/view-profile")
+//    public ResponseEntity<UserResponse> getUserById() {
+//        UserResponse res = userService.viewProfile();
+//        return new ResponseEntity<>(res, HttpStatus.OK);
+//    }
+//
+//    @GetMapping("/get/to-be-deleted")
+//    public ResponseEntity<List<UserResponse>> getAllUser() {
+//        List<UserResponse> res = userService.getToBeDeletedUser();
+//        return new ResponseEntity<>(res, HttpStatus.OK);
+//    }
 
 }

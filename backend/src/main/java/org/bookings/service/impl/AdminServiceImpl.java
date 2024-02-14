@@ -2,8 +2,8 @@ package org.bookings.service.impl;
 
 import java.util.Optional;
 
-import org.bookings.AdminDao;
-import org.bookings.AdminException;
+import org.bookings.repository.AdminDao;
+import org.bookings.exception.AdminException;
 import org.bookings.Role;
 import org.bookings.model.Admin;
 import org.bookings.service.AdminService;
