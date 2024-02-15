@@ -11,14 +11,14 @@ public interface UserService {
 
     public UserResponse registerUser(UserRequest userRequest);
 
-//    public String updateName(UpdateRequest updateRequest);
-//
-//    public String updatePassword(UpdatePasswordRequest updatePasswordRequest);
-//
-//    public String deleteUser(UpdateRequest updateRequest);
-//
-//    public List<UserResponse> getToBeDeletedUser();
-//
-//    public UserResponse viewProfile();
+    public String updateName(UpdateRequest updateRequest);
+
+    public String updatePassword(UpdatePasswordRequest updatePasswordRequest);
+
+    public String deleteUser(UpdateRequest updateRequest);
+
+    public List<UserResponse> getToBeDeletedUser();
+
+    public UserResponse viewProfile();
 
 }

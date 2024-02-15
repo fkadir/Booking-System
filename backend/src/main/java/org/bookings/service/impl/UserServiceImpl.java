@@ -11,8 +11,8 @@ import org.bookings.dto.request.UserRequest;
 import org.bookings.dto.response.UserResponse;
 import org.bookings.exception.UserException;
 import org.bookings.model.User;
-//import org.springframework.security.core.context.SecurityContextHolder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,8 +35,8 @@ import lombok.extern.slf4j.Slf4j;
 public class UserServiceImpl implements UserService {
 
     private UserDao dao;
-//    private PasswordEncoder passwordEncoder;
-//    private DeleteReasonDao deleteReasonDao;
+    private PasswordEncoder passwordEncoder;
+    private DeleteReasonDao deleteReasonDao;
 
     @Override
     public UserResponse registerUser(UserRequest userRequest) {
@@ -58,108 +58,93 @@ public class UserServiceImpl implements UserService {
         return buildUserResponse(user);
     }
 
-//    @Override
-//    public String updateName(UpdateRequest updateRequest) {
-//        User currentCustomer = getCurrentLoggedInCustomer();
-//
-//        log.info("Verifying credentials");
-//        String password = new String(updateRequest.getPassword());
-//        if (!passwordEncoder.matches(password, currentCustomer.getPassword())) {
-//            throw new UserException("Wrong credentials!");
-//        }
-//        dao.setUserEmail(currentCustomer.getCustomerId(), updateRequest.getField());
-//
-//        log.info("negation successful");
-//        return "Name updated successfully!";
-//    }
-//
-//    @Override
-//    public String updatePassword(UpdatePasswordRequest updatePasswordRequest) {
-//        Customer currentCustomer = getCurrentLoggedInCustomer();
-//
-//        log.info("Verifying credentials");
-//        String currentPassword = new String(updatePasswordRequest.getCurrentPassword());
-//        if (!passwordEncoder.matches(currentPassword, currentCustomer.getPassword())) {
-//            throw new CustomerException("Wrong credentials!");
-//        }
-//
-//        log.info("Validating new password");
-//        String newPassword = new String(updatePasswordRequest.getNewPassword());
-//        if (!matchesRegex(newPassword)) {
-//            throw new CustomerException("New password validation failed!");
-//        }
-//
-//        dao.setCustomerPassword(currentCustomer.getCustomerId(), passwordEncoder.encode(newPassword));
-//
-//        log.info("negation successfully");
-//        return "Password updated successfully!";
-//    }
-//
-//    @Override
-//    public String updatePhone(UpdateRequest updateRequest) {
-//        Customer currentCustomer = getCurrentLoggedInCustomer();
-//
-//        log.info("Verifying credentials");
-//        String password = new String(updateRequest.getPassword());
-//        if (!passwordEncoder.matches(password, currentCustomer.getPassword())) {
-//            throw new CustomerException("Wrong credentials!");
-//        }
-//        dao.setCustomerPhone(currentCustomer.getCustomerId(), updateRequest.getField());
-//
-//        log.info("negation successful");
-//        return "Phone updated successfully!";
-//    }
-//
-//    @Override
-//    public String deleteCustomer(UpdateRequest updateRequest) {
-//        Customer currentCustomer = getCurrentLoggedInCustomer();
-//
-//        log.info("Verifying credentials");
-//        String password = new String(updateRequest.getPassword());
-//        if (!passwordEncoder.matches(password, currentCustomer.getPassword())) {
-//            throw new CustomerException("Wrong credentials!");
-//        }
-//
-//        List<Reservation> reservations = currentCustomer.getReservations();
-//        List<Reservation> pendingReservations = reservations.stream().filter(
-//                        r -> r.getCheckoutDate().isAfter(LocalDate.now()) || r.getCheckoutDate().isEqual(LocalDate.now()))
-//                .collect(Collectors.toList());
-//
-//        log.info("Checking for any pending reservations");
-//        if (!pendingReservations.isEmpty())
-//            throw new CustomerException("Pending reservations! Account can't be deleted");
-//
-//        log.info("Setting Account status to be deleted");
-//        currentCustomer.setToBeDeleted(true);
-//        currentCustomer.setDeletionScheduledAt(LocalDateTime.now());
-//        dao.save(currentCustomer);
-//
-//        DeleteReason deleteReason = new DeleteReason();
-//        deleteReason.setReason(updateRequest.getField());
-//        deleteReasonDao.save(deleteReason);
-//
-//        log.info("Account scheduled for deletion and Logged out!");
-//        return "Account scheduled for deletion. To recovered login again within 24 hours";
-//    }
-//
-//    @Override
-//    public List<CustomerResponse> getToBeDeletedCustomers() {
-//        List<Customer> customers = dao.findByToBeDeleted(true);
-//        if (customers.isEmpty())
-//            throw new CustomerException("No accounts found for deletion");
-//
-//        return customers.stream().map(this::buildCustomerResponse).collect(Collectors.toList());
-//    }
-//
-//    @Override
-//    public UserResponse viewProfile() {
-//        return buildUserResponse(getCurrentLoggedInCustomer());
-//    }
-//
-//    private User getCurrentLoggedInUser() {
-//        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-//        return dao.findByEmail(email).get();
-//    }
+    @Override
+    public String updateName(UpdateRequest updateRequest) {
+        User currentCustomer = getCurrentLoggedInUser();
+
+        log.info("Verifying credentials");
+        String password = new String(updateRequest.getPassword());
+        if (!passwordEncoder.matches(password, currentCustomer.getPassword())) {
+            throw new UserException("Wrong credentials!");
+        }
+        dao.setUserEmail(currentCustomer.getCustomerId(), updateRequest.getField());
+
+        log.info("negation successful");
+        return "Name updated successfully!";
+    }
+
+    @Override
+    public String updatePassword(UpdatePasswordRequest updatePasswordRequest) {
+        User currentUser = getCurrentLoggedInUser();
+
+        log.info("Verifying credentials");
+        String currentPassword = new String(updatePasswordRequest.getCurrentPassword());
+        if (!passwordEncoder.matches(currentPassword, currentUser.getPassword())) {
+            throw new UserException("Wrong credentials!");
+        }
+
+        log.info("Validating new password");
+        String newPassword = new String(updatePasswordRequest.getNewPassword());
+        if (!matchesRegex(newPassword)) {
+            throw new UserException("New password validation failed!");
+        }
+
+        dao.setUserPassword(currentUser.getCustomerId(), passwordEncoder.encode(newPassword));
+
+        log.info("negation successfully");
+        return "Password updated successfully!";
+    }
+
+    @Override
+    public String deleteUser(UpdateRequest updateRequest) {
+        User currentUser = getCurrentLoggedInUser();
+
+        log.info("Verifying credentials");
+        String password = new String(updateRequest.getPassword());
+        if (!passwordEncoder.matches(password, currentUser.getPassword())) {
+            throw new UserException("Wrong credentials!");
+        }
+
+        List<Reservation> reservations = currentUser.getReservations();
+        List<Reservation> pendingReservations = reservations.stream().filter(
+                        r -> r.getCheckoutDate().isAfter(LocalDate.now()) || r.getCheckoutDate().isEqual(LocalDate.now()))
+                .collect(Collectors.toList());
+
+        log.info("Checking for any pending reservations");
+        if (!pendingReservations.isEmpty())
+            throw new UserException("Pending reservations! Account can't be deleted");
+
+        log.info("Setting Account status to be deleted");
+        currentUser.setToBeDeleted(true);
+        currentUser.setDeletionScheduledAt(LocalDateTime.now());
+        dao.save(currentUser);
+
+        DeleteReason deleteReason = new DeleteReason();
+        deleteReason.setReason(updateRequest.getField());
+        deleteReasonDao.save(deleteReason);
+
+        log.info("Account scheduled for deletion and Logged out!");
+        return "Account scheduled for deletion. To recovered login again within 24 hours";
+    }
+
+    @Override
+    public List<UserResponse> getToBeDeletedUser() {
+        List<User> customers = dao.findByToBeDeleted(true);
+        if (customers.isEmpty())
+            throw new UserException("No accounts found for deletion");
+
+        return customers.stream().map(this::buildUserResponse).collect(Collectors.toList());
+    }
+
+    @Override
+    public UserResponse viewProfile() {
+        return buildUserResponse(getCurrentLoggedInUser());
+    }
+
+    private User getCurrentLoggedInUser() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return dao.findByEmail(email).get();
+    }
 
     private boolean isEmailExists(String email) {
         return dao.findByEmail(email).isPresent();
@@ -176,8 +161,7 @@ public class UserServiceImpl implements UserService {
         return User.builder()
                 .name(userRequest.getName())
                 .email(userRequest.getEmail())
-//                .password(passwordEncoder.encode(new String(userRequest.getPassword())))
-                .password(new String(userRequest.getPassword()))
+                .password(passwordEncoder.encode(new String(userRequest.getPassword())))
                 .role(Role.ROLE_USER)
                 .toBeDeleted(false)
                 .reservations(new ArrayList<>())
