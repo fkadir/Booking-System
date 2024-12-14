@@ -1,17 +1,18 @@
 package org.bookings.entity;
 
-import com.sun.tools.javac.util.List;
+import java.util.Collection;
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
+import org.bookings.dto.UserDto;
 import org.bookings.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
 
 @Entity
 @Data
@@ -36,7 +37,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return name;
+        return email;
     }
 
     @Override
@@ -57,5 +58,15 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public UserDto getUserDto() {
+        UserDto dto = new UserDto();
+        dto.setId(id);
+        dto.setName(name);
+        dto.setEmail(email);
+        dto.setRole(role);
+
+        return dto;
     }
 }
