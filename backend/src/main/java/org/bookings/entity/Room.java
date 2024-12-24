@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
+import org.bookings.dto.RoomDto;
 
 @Entity
 @Data
@@ -21,5 +22,17 @@ public class Room {
     private Long price;
 
     private boolean available;
+
+    public RoomDto getRoomDto() {
+        RoomDto roomDto = new RoomDto();
+
+        roomDto.setId(id);
+        roomDto.setName(name);
+        roomDto.setType(type);
+        roomDto.setAvailable(available);
+        roomDto.setPrice(price);
+
+        return roomDto;
+    }
 
 }
